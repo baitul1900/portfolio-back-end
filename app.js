@@ -30,8 +30,8 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 60, max: 4000 })
 app.use(limiter)
 
 
-let URI = "mongodb+srv://baitulamin1900:5N0xpCiNWYDwQKmq@cluster0.g3nbdjd.mongodb.net/"
-let OPTION = {user : "baitulamin1900", pass : '5N0xpCiNWYDwQKmq', autoIndex : true};
+let URI = process.env.MONGO_URL;
+let OPTION = {user : process.env.USER, pass : process.env.PASSWORD, autoIndex : true};
 
 mongoose.connect(URI,OPTION)
     .then((res)=> {

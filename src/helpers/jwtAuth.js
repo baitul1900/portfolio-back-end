@@ -12,7 +12,7 @@ exports.encodeToken = (email, user_id) => {
 exports.decodeToken = (token) => {
     try {
         let KEY="123-ABC-XYZ";
-console.log("received token:",token)
+// console.log("received token:",token)
         return jwt.verify(token,KEY)
     }
     catch (e) {

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 
 const projectData = mongoose.Schema({
-    projectName : {type: String, required: true},
+    projectName : {type: String, required: true, unique: true},
     shortDes : {type: String, required: true},
     Des: {type: String, required: true},
     technologyUse : {type: String, required: true},

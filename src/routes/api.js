@@ -2,64 +2,58 @@ const express = require('express');
 const router = express.Router();
 
 // import auh verification for oken helpp
-// const authVerify = require('../middlewares/authVerification');
+const authVerify = require('../middlewares/authVerification');
 
-// // all imports about user 
-// const userController = require('../controller/userController');
-
-// // all brand controller 
-// const brandController = require('../controller/brandController');
-
-// // category controller
-// const categoryController = require('../controller/categoryController');
-
-// // product controller 
-// const productController = require("../controller/productController");
-
-
-// // customer controller 
-// const cutomerController = require('../controller/customerController');
-
-
-// // user registration routes
-// router.post('/user-registration', userController.userRegistration);
-// router.post('/login', userController.userLoginController);
-// router.get('/profile', authVerify, userController.profileDetails);
-// router.post('/updateProfile', authVerify, userController.updateProfile);
-// router.get('/account-recover/:email', userController.accountRecoverController);
-// router.get('/verify-otp/:email/:otp', userController.verifyOtpController);
-
-// // brand routes
-// router.post('/create-brand', authVerify, brandController.createBrand);
-// router.get('/brandList', authVerify, brandController.brandListController);
-// router.post('/brand/:id', authVerify, brandController.updateBrandController);
-// router.get('/deleteBrand/:id', authVerify, brandController.deleteBrandController);
-// router.get('/getbrand/:id', authVerify, brandController.getBrandById);
-
-
-// // category routes
-// router.post('/create-category', authVerify, categoryController.createCategory);
-// router.get('/category', authVerify, categoryController.categoryListController);
-// router.post('/category-update/:id', authVerify, categoryController.updatecategory);
-// router.get('/category-delete/:id', authVerify, categoryController.deleteCategoryController);
-// router.get('/getByCategory/:id', authVerify, categoryController.getCategoryById);
+// all imports about user 
+const userController = require('../controller/userController');
+const projectController = require('../controller/projectController');
+const commentController = require('../controller/commentController');
+const {createService, serviceList, getServiceById, updateService, deleteService} = require('../controller/serviceController');
+const {createBlog, BlogList, getBlogById, updateBlog, deleteBlog} = require('../controller/blogController');
 
 
 
-// // product controller 
-// router.post('/create-product', authVerify, productController.createProduct);
-// router.get('/product', authVerify, productController.productList);
-// router.get('/product-brand/:brandID', authVerify, productController.productByBrand);
-// router.get('/product-category/:categoryID', authVerify, productController.productListByCategory);
-// router.get('/product-by-keyword/:Keyword', authVerify, productController.productByKeyword);
-// router.post('/products/:productId', authVerify, productController.updateProduct);
-// router.delete('/products/:productId', authVerify, productController.deleteProduct);
+// user registration routes
+router.post('/user-registration', userController.userRegistration);
+router.post('/login', userController.userLoginController);
+router.get('/profile', authVerify, userController.profileDetails);
+router.post('/updateProfile', authVerify, userController.updateProfile);
+router.get('/account-recover/:email', userController.accountRecoverController);
+router.get('/verify-otp/:email/:otp', userController.verifyOtpController);
 
 
 
-// // customer routes
-// router.post('/create-customer', authVerify, cutomerController.createCustomer);
-// router.get('/customer', authVerify, cutomerController.getAllCustomer);
+// project controller 
+router.post('/create-project', authVerify, projectController.createProject);
+router.get('/project', projectController.projectList);
+router.get('/project/:id', authVerify, projectController.getProjectById);
+router.post('/project-update/:id', authVerify, projectController.updateProject);
+router.delete('/project-delete/:id', authVerify, projectController.deleteProject);
+
+
+// comment handel 
+router.post('/create-comment', commentController.createComment);
+router.post('/approve-comment/:id', authVerify, commentController.approveComment);
+router.delete('/delete-comment/:id', authVerify, commentController.deleteComment);
+
+// service handel 
+router.post('/create-service', authVerify, createService);
+router.get('/service', serviceList);
+router.get('/service/:id', authVerify, getServiceById);
+router.post('/service-update/:id', authVerify, updateService);
+router.delete('/service-delete/:id', authVerify, deleteService);
+
+
+// blog handel
+router.post('/create-blog', authVerify, createBlog);
+router.get('/blog', BlogList);
+router.get('/blog/:id', authVerify, getBlogById);
+router.post('/blog-update/:id', authVerify, updateBlog);
+router.delete('/blog-delete/:id', authVerify, deleteBlog);
+
+
+
+
 
 
 
