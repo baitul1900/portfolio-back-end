@@ -77,8 +77,24 @@ const deleteProject = async (req, res) => {
 }
 
 
+// search by keyword
+const searchKeyword = async (req, res) => {
+    try {
+        let query = {};
+        const keyword = req.query.keyword;
+        if (keyword) {
+            query = { projectName: { $regex: keyword, $options: 'i' } };
+        }
+        const projects = await projectModel.find(query);
+        return res.status(200).json({ status: "success", data: projects });
+    } catch (err) {
+        return res.status(500).json({ status: "fail", data: err });
+    }
+}
+
+
 
 
 module.exports = {
-    createProject, projectList, getProjectById, updateProject, deleteProject
+    createProject, projectList, getProjectById, updateProject, deleteProject, searchKeyword
 }

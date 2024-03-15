@@ -29,6 +29,7 @@ router.get('/project', projectController.projectList);
 router.get('/project/:id', authVerify, projectController.getProjectById);
 router.post('/project-update/:id', authVerify, projectController.updateProject);
 router.delete('/project-delete/:id', authVerify, projectController.deleteProject);
+router.get('/projects', authVerify, projectController.searchKeyword);
 
 
 // comment handel 
