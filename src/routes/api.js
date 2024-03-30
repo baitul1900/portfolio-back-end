@@ -35,6 +35,7 @@ router.get('/projects', authVerify, projectController.searchKeyword);
 // comment handel 
 router.post('/create-comment', commentController.createComment);
 router.post('/approve-comment/:id', authVerify, commentController.approveComment);
+router.get('/comments', commentController.getAllComment);
 router.delete('/delete-comment/:id', authVerify, commentController.deleteComment);
 
 // service handel 

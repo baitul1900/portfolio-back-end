@@ -16,6 +16,18 @@ const createComment = async (req, res) => {
 }
 
 
+// get all comment
+const getAllComment = async (req, res) => {
+    try {
+        const comment = await commentModel.find();
+        return res.status(200).json({ status: 'success', data: comment });
+    } catch (error) {
+        console.error('Error getting all comments:', error);
+        return res.status(500).json({ status: 'error', message: 'Internal server error' });
+    }
+}
+
+
 // approve comment by ID
 const approveComment = async (req, res) => {
     try {
@@ -54,5 +66,5 @@ const deleteComment = async (req, res) => {
 
 
 module.exports = {
-    createComment, approveComment, deleteComment
+    createComment, approveComment, deleteComment, getAllComment
 }
