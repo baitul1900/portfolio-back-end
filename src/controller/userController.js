@@ -1,4 +1,16 @@
 const {userProfileCreate,verifyOtpService, loginUserService, readProfileService, updateUserService, recoverAccountService} = require('../service/userService');
+const osUtils = require('os-utils');
+
+
+// Controller function to get CPU performance data
+exports.getCpuPerformance = (req, res) => {
+    osUtils.cpuUsage((cpuUsage) => {
+      // Calculate progress based on CPU usage
+      const progress =parseFloat(cpuUsage.toFixed(2)) * 100;
+      const cores = osUtils.cpuCount(); // Assume CPU usage percentage as progress
+      res.json({ progress });
+    });
+};
 
 
 exports.userRegistration = async (req, res) => {

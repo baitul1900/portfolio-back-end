@@ -20,6 +20,8 @@ router.get('/profile', authVerify, userController.profileDetails);
 router.post('/updateProfile', authVerify, userController.updateProfile);
 router.get('/account-recover/:email', userController.accountRecoverController);
 router.get('/verify-otp/:email/:otp', userController.verifyOtpController);
+router.get('/cpu-performance', userController.getCpuPerformance);
+
 
 
 
