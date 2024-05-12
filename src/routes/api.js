@@ -44,6 +44,10 @@ router.delete('/delete-comment/:id', authVerify, commentController.deleteComment
 router.post('/create-service', authVerify, createService);
 router.get('/service', serviceList);
 router.get('/service/:id', authVerify, getServiceById);
+router.get('/service/:id', authVerify, getServiceById);
+// for public view
+router.get('/service/:id', getServiceById);
+// ----end-----
 router.post('/service-update/:id', authVerify, updateService);
 router.delete('/service-delete/:id', authVerify, deleteService);
 
