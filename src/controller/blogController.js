@@ -18,12 +18,28 @@ const createBlog = async (req, res) => {
 // get all Blog 
 const BlogList = async (req, res) => {
     try {
-        const Blog = await blogModel.find();
-        return res.status(200).json({ status: "success", data: Blog });
+        // Extract page and limit from query parameters, provide default values
+        const { page = 1, limit = 10 } = req.query;
+
+        // Convert page and limit to numbers
+        const pageNum = parseInt(page);
+        const limitNum = parseInt(limit);
+
+        // Use the paginate method on the model
+        const options = {
+            page: pageNum,
+            limit: limitNum,
+            sort: { createdAt: -1 } // Optional: Sort by createdAt in descending order
+        };
+
+        const result = await blogModel.paginate({}, options);
+
+        return res.status(200).json({ status: "success", data: result });
     } catch (err) {
         return res.status(500).json({ status: "fail", data: err });
     }
 }
+
 
 
 // get Blog by ID 

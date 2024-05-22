@@ -14,6 +14,7 @@ const blogData = mongoose.Schema({
     {timestamp:true, versionKey: false}
 );
 
+blogData.plugin(mongoosePaginate);
 
 const blogModel = mongoose.model('blogs', blogData);
 module.exports = blogModel;

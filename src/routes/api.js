@@ -46,7 +46,7 @@ router.get('/service', serviceList);
 router.get('/service/:id', authVerify, getServiceById);
 router.get('/service/:id', authVerify, getServiceById);
 // for public view
-router.get('/service/:id', getServiceById);
+router.get('/serviceBy/:id', getServiceById);
 // ----end-----
 router.post('/service-update/:id', authVerify, updateService);
 router.delete('/service-delete/:id', authVerify, deleteService);
@@ -56,6 +56,7 @@ router.delete('/service-delete/:id', authVerify, deleteService);
 router.post('/create-blog', authVerify, createBlog);
 router.get('/blog', BlogList);
 router.get('/blog/:id', authVerify, getBlogById);
+router.get('/blogBy/:id',  getBlogById);
 router.post('/blog-update/:id', authVerify, updateBlog);
 router.delete('/blog-delete/:id', authVerify, deleteBlog);
 
