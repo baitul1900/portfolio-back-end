@@ -10,6 +10,7 @@ const projectController = require('../controller/projectController');
 const commentController = require('../controller/commentController');
 const {createService, serviceList, getServiceById, updateService, deleteService} = require('../controller/serviceController');
 const {createBlog, BlogList, getBlogById, updateBlog, deleteBlog} = require('../controller/blogController');
+const { createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories } = require('../controller/CategoryController');
 
 
 
@@ -25,7 +26,21 @@ router.get('/profile', authVerify, userController.profileDetails);
 // Update user profile route
 router.put('/profile', authVerify, userController.updateProfile);
 
-// Get CPU performance route
+
+
+// category create controller 
+router.post('/create-category', authVerify, createCategory);
+
+// category update controller
+router.put('/category-update/:id', authVerify, updateCategory);
+
+// sub category create controller
+router.post('/create-sub-category', authVerify, createSubCategory);
+
+// get all categoris with sub category
+router.get('/categories', authVerify, getAllCategoriesWithSubCategories);
+
+
 
 
 
