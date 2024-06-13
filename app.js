@@ -26,12 +26,13 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // rate limite here
 
-const limiter = rateLimit({ windowMs: 15 * 60 * 60, max: 4000 })
+const limiter = rateLimit({ windowMs: 15 * 60 * 60, max: 50, standardHeaders: true, legacyHeaders: false, message: 'Too many requests from this IP, please try again in an hour!' ,delay : 1000 })
 app.use(limiter)
 
 
-let URI = process.env.MONGO_URL;
 let OPTION = {user : process.env.USER, pass : process.env.PASSWORD, autoIndex : true};
+
+let URI = process.env.MONGO_URL;
 
 mongoose.connect(URI,OPTION)
     .then((res)=> {

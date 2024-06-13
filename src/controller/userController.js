@@ -1,73 +1,52 @@
-const {userProfileCreate,verifyOtpService, loginUserService, readProfileService, updateUserService, recoverAccountService} = require('../service/userService');
-const osUtils = require('os-utils');
-
-
-// Controller function to get CPU performance data
-exports.getCpuPerformance = (req, res) => {
-    osUtils.cpuUsage((cpuUsage) => {
-      // Calculate progress based on CPU usage
-      const progress =parseFloat(cpuUsage.toFixed(2)) * 100;
-      const cores = osUtils.cpuCount(); // Assume CPU usage percentage as progress
-      res.json({ progress });
-    });
-};
+const { userProfileCreate, loginUserService, readProfileService, updateUserService } = require('../service/userService');
 
 
 exports.userRegistration = async (req, res) => {
     try {
-        let resBody = await userProfileCreate(req);
-    return res.status(200).json(resBody);
-    }
-    catch (e) {
-        return res.status(500).json({status: "fail", messages: "something went wrong"})
+        const resBody = await userProfileCreate(req);
+        return res.status(200).json(resBody);
+    } catch (e) {
         console.error('Error in userRegistration:', e);
+        return res.status(500).json({ status: "fail", message: "something went wrong" });
     }
 }
 
 exports.userLoginController = async (req, res) => {
     try {
-        let result = await loginUserService(req);
-        if (result['status'] === "success") {
-            let cookieOption = { expires: new Date(Date.now() + 24 * 6060 * 1000), httpOnly: false };
-
-            res.cookie('token', result['token'], cookieOption);
+        const result = await loginUserService(req);
+        if (result.status === "success") {
+            const cookieOption = { expires: new Date(Date.now() + 24 * 60 * 60 * 1000), httpOnly: true };
+            res.cookie('token', result.token, cookieOption);
             return res.status(200).json(result);
+        } else {
+            return res.status(401).json({ status: "fail", message: "Invalid credentials" });
         }
     } catch (e) {
-        console.error('Error in userLoginController:', e); // Add this line to log errors
+        console.error('Error in userLoginController:', e);
         return res.status(500).json({ status: "fail", message: "something went wrong" });
     }
 };
 
-
-
-
-exports.profileDetails = async (req, res)=> {
+exports.profileDetails = async (req, res) => {
     try {
-        let result = await readProfileService(req);
+        const result = await readProfileService(req);
         if (result.status === "success") {
             return res.status(200).json(result);
         } else {
-            return res.status(404).json(result); // Return 404 if user profile not found
+            return res.status(404).json(result);
         }
-    }
-    catch (e) {
-        return res.status(500).json({status: "fail", messages: "something went wrong"})
+    } catch (e) {
+        console.error('Error in profileDetails:', e);
+        return res.status(500).json({ status: "fail", message: "something went wrong" });
     }
 };
 
-
-exports.updateProfile = async (req, res)=> {
-    let result = await updateUserService(req);
-    return res.status(200).json(result);
-}
-
-exports.accountRecoverController = async (req, res)=> {
-    let result = await recoverAccountService(req);
-    return res.status(200).json(result);
-}
-
-exports.verifyOtpController = async (req, res)=> {
-    let result = await verifyOtpService(req);
-    return res.status(200).json({status: "success", data: result});
-}; 
+exports.updateProfile = async (req, res) => {
+    try {
+        const result = await updateUserService(req);
+        return res.status(200).json(result);
+    } catch (e) {
+        console.error('Error in updateProfile:', e);
+        return res.status(500).json({ status: "fail", message: "something went wrong" });
+    }
+};

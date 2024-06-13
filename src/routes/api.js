@@ -13,14 +13,19 @@ const {createBlog, BlogList, getBlogById, updateBlog, deleteBlog} = require('../
 
 
 
-// user registration routes
+// User registration route
 router.post('/user-registration', userController.userRegistration);
+
+// User login route
 router.post('/login', userController.userLoginController);
+
+// Get user profile route
 router.get('/profile', authVerify, userController.profileDetails);
-router.post('/updateProfile', authVerify, userController.updateProfile);
-router.get('/account-recover/:email', userController.accountRecoverController);
-router.get('/verify-otp/:email/:otp', userController.verifyOtpController);
-router.get('/cpu-performance', userController.getCpuPerformance);
+
+// Update user profile route
+router.put('/profile', authVerify, userController.updateProfile);
+
+// Get CPU performance route
 
 
 

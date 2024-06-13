@@ -1,43 +1,26 @@
 const bcrypt = require('bcrypt');
 const { encodeToken } = require("../helpers/jwtAuth");
 const userModel = require('../models/userModel');
-const SendEmailUtility = require('../utility/SendEmailUtility');
-const OTPModels = require('../models/OTPMode');
-const {generateOtp, sendOtp} = require('../utility/OtpUtility');
-
 
 const userProfileCreate = async (req) => {
     try {
         // Hash the password
         const password = await bcrypt.hash(req.body.password, 10);
-        
-        // Extract user details from the request body
-        const { name, email, phone } = req.body;
 
-        // Generate OTP
-        const otp = generateOtp();
+        // Extract user details from the request body
+        const { name, email, phone, role = 'user' } = req.body;
 
         // Create user in the database
-        await userModel.create({ name, email, phone, password });
-
-        // Send OTP to the user's email
-        await sendOtp(email, otp);
-
-        // Save OTP to the OTP model
-        await OTPModels.create({ email, otp });
+        await userModel.create({ name, email, phone, password, role });
 
         // Return success response
-        return { status: "success", message: "Otp code sent for verification" };
+        return { status: "success", message: "User created successfully" };
     } catch (e) {
         // Handle errors
         console.error("Error in userProfileCreate:", e);
         return { status: "fail", message: "Something went wrong" };
     }
-}
-
-
-
-
+};
 
 const loginUserService = async (req) => {
     try {
@@ -59,34 +42,31 @@ const loginUserService = async (req) => {
         const token = encodeToken(user.email, user._id);
         return { status: "success", message: "User logged in", token };
     } catch (error) {
-        console.error('Error in loginUserService:', error); // Add this line to log errors
+        console.error('Error in loginUserService:', error);
         throw error;
     }
 };
 
-const readProfileService = async (req)=> {
+const readProfileService = async (req) => {
     try {
-        let email = req.headers['email'];
-        let userProfile = await userModel.findOne({ email }); // Assuming you only want to find one user profile
+        const email = req.headers['email'];
+        const userProfile = await userModel.findOne({ email }); // Assuming you only want to find one user profile
         if (userProfile) {
             return { status: "success", data: userProfile };
         } else {
             return { status: "fail", message: "User profile not found" };
         }
+    } catch (e) {
+        return { status: "fail", message: 'Something went wrong' };
     }
-    catch (e) {
-        return {status:"fail",message:'something went wrong'}
-    }
-}
-
-
+};
 
 const updateUserService = async (req) => {
     try {
-        const { password, image } = req.body;
+        const { password, image, role } = req.body;
         const email = req.headers['email'];
 
-        if (!password && !image) {
+        if (!password && !image && !role) {
             // No fields to update
             return { status: "fail", message: "No fields to update" };
         }
@@ -100,6 +80,9 @@ const updateUserService = async (req) => {
         if (image) {
             updateFields.image = image;
         }
+        if (role) {
+            updateFields.role = role;
+        }
 
         // Update the user document
         await userModel.updateOne({ email }, { $set: updateFields }, { upsert: true });
@@ -111,74 +94,9 @@ const updateUserService = async (req) => {
     }
 };
 
-
-
-
-const recoverAccountService = async (req) => {
-    try {
-        let email = req.params['email'];
-        let otpCode = Math.floor(1000 + Math.random() * 9000);
-        let emailText = `Your OTP code is ${otpCode}`;
-        let emailSub = "OTP Code";
-
-        // Check if user exists
-        let userCount = await userModel.countDocuments({ email });
-        if (userCount !== 1) {
-            return { status: "fail", message: "User not found" };
-        }
-
-        // Send OTP via email
-        await SendEmailUtility(email, emailText, emailSub);
-
-        // Save OTP code to the database
-        await OTPModels.findOneAndUpdate({ email }, { otp: otpCode }, { upsert: true });
-
-        return { status: "success", message: "OTP sent" };
-    } catch (error) {
-        console.error(error);
-        return { status: "fail", message: "Something went wrong" };
-    }
-};
-
-
-
-
-const verifyOtpService = async (req) => {
-    try {
-        let email = req.params['email'];
-        let otpCode = req.params['otp'];
-        let status = 0;
-        let statusUpdate = 1;
-
-    let result = await OTPModels.findOne({email: email, otp: otpCode, status: status}).count();
-
-if(result === 1) {
-    await OTPModels.updateOne({email: email, otp: otpCode, status: status}, {status: statusUpdate})
-    return {status: "success", message: "OTP verified"}
-} else {
-    return {status: "fail", message: "OTP not match"}
-}
-    }
-     catch (e) {
-        return {status:"fail",message:'something went wrong service function'}
-     }
-}
-
-
-
-
-
-
-
-
-
-
-
 module.exports = {
     userProfileCreate,
     loginUserService,
     readProfileService,
     updateUserService,
-    recoverAccountService,
-    verifyOtpService
-}
+};
