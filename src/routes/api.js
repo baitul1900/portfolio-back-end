@@ -26,9 +26,7 @@ router.get('/profile', authVerify, userController.profileDetails);
 // Update user profile route
 router.put('/profile', authVerify, userController.updateProfile);
 
-<<<<<<< HEAD
-// Get CPU performance route
-=======
+
 
 
 // category create controller 
@@ -44,7 +42,7 @@ router.post('/create-sub-category', authVerify, createSubCategory);
 router.get('/categories', authVerify, getAllCategoriesWithSubCategories);
 
 
->>>>>>> 50695c9ad09ebb9644414aa0b28c3e423be9b542
+
 
 
 
