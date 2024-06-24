@@ -9,7 +9,7 @@ const createCategory = async (req, res) => {
         const reqBody = req.body;
         const result = await categoryModel.create({
             ...reqBody,
-            isDeleted: false, // Ensure isDeleted is set to false initially
+            isDeleted: false, 
         });
         return res.status(201).json({ status: "success", data: result });
     } catch (err) {
@@ -104,7 +104,7 @@ const deleteCategory = async (req, res) => {
         const { id } = req.params;
         const result = await categoryModel.updateOne(
             { _id: id },
-            { $set: { isDeleted: true } } // Perform soft delete by setting isDeleted to true
+            { $set: { isDeleted: true } } 
         );
         if (result.nModified === 0) {
             return res.status(404).json({ status: "fail", data: "Category not found" });
