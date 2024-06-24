@@ -10,6 +10,7 @@ const subCategorySchema = new mongoose.Schema({
   description: {
     type: String,
     trim: true,
+        default: 'No description'
   },
   parentCategory: {
     type: mongoose.Schema.Types.ObjectId,

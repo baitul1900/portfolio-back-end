@@ -9,8 +9,10 @@ const categorySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    trim: true
-  }
+    trim: true,
+    default: 'No description'
+  },
+  isDeleted: { type: Boolean, default: false }, // Add this field
 }, { timestamps: true, versionKey: false });
 
 const Category = mongoose.model('Category', categorySchema);

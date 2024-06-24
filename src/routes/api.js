@@ -10,7 +10,7 @@ const projectController = require('../controller/projectController');
 const commentController = require('../controller/commentController');
 const {createService, serviceList, getServiceById, updateService, deleteService} = require('../controller/serviceController');
 const {createBlog, BlogList, getBlogById, updateBlog, deleteBlog} = require('../controller/blogController');
-const { createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories } = require('../controller/CategoryController');
+const { createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories, deleteCategory } = require('../controller/CategoryController');
 
 
 
@@ -35,11 +35,14 @@ router.post('/create-category', authVerify, createCategory);
 // category update controller
 router.put('/category-update/:id', authVerify, updateCategory);
 
-// sub category create controller
+// Route for creating a subcategory
 router.post('/create-sub-category', authVerify, createSubCategory);
 
 // get all categoris with sub category
 router.get('/categories', authVerify, getAllCategoriesWithSubCategories);
+
+// delete category
+router.delete('/delete-category/:id', authVerify, deleteCategory);
 
 
 

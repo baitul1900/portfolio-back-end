@@ -6,13 +6,17 @@ let ObjectId = mongoose.Types.ObjectId;
 
 const createCategory = async (req, res) => {
     try {
-        let reqBody = req.body;
-        let result = await categoryModel.create(reqBody);
-        return res.status(200).json({ status: "success", data: result });
+        const reqBody = req.body;
+        const result = await categoryModel.create({
+            ...reqBody,
+            isDeleted: false, // Ensure isDeleted is set to false initially
+        });
+        return res.status(201).json({ status: "success", data: result });
     } catch (err) {
         return res.status(500).json({ status: "fail", data: err });
     }
 };
+
 
 
 
@@ -33,7 +37,7 @@ const createSubCategory = async (req, res) => {
         const { name, description, parentCategory } = req.body;
 
         // Validate if parent category exists
-        const parentCategoryExists = await categoryModel.findById(parentCategory);
+        const parentCategoryExists = await categoryModel.findOne({ _id: parentCategory, isDeleted: false });
         if (!parentCategoryExists) {
             return res.status(400).json({ status: "fail", data: "Parent category does not exist" });
         }
@@ -52,9 +56,15 @@ const createSubCategory = async (req, res) => {
     }
 };
 
-const getAllCategoriesWithSubCategories  = async (req, res) => {
+
+const getAllCategoriesWithSubCategories = async (req, res) => {
     try {
         const categories = await categoryModel.aggregate([
+            {
+                $match: {
+                    isDeleted: false,
+                }
+            },
             {
                 $lookup: {
                     from: "subcategories",
@@ -78,17 +88,36 @@ const getAllCategoriesWithSubCategories  = async (req, res) => {
                     },
                 },
             }
-
-        ])
+        ]);
 
         return res.status(200).json({ status: "success", data: categories });
     } catch (err) {
         return res.status(500).json({ status: "fail", data: err });
     }
-}
+};
+
+
+
+// delete category 
+const deleteCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await categoryModel.updateOne(
+            { _id: id },
+            { $set: { isDeleted: true } } // Perform soft delete by setting isDeleted to true
+        );
+        if (result.nModified === 0) {
+            return res.status(404).json({ status: "fail", data: "Category not found" });
+        }
+        console.log(result);
+        return res.status(200).json({ status: "success", data: result });
+    } catch (err) {
+        return res.status(500).json({ status: "fail", data: err });
+    }
+};
 
 
 
 module.exports = {
-    createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories
+    createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories, deleteCategory
 }
