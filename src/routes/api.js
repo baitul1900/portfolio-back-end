@@ -6,11 +6,11 @@ const authVerify = require('../middlewares/authVerification');
 
 // all imports about user 
 const userController = require('../controller/userController');
-const projectController = require('../controller/projectController');
 const commentController = require('../controller/commentController');
 const {createService, serviceList, getServiceById, updateService, deleteService} = require('../controller/serviceController');
 const {createBlog, BlogList, getBlogById, updateBlog, deleteBlog} = require('../controller/blogController');
 const { createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories, deleteCategory } = require('../controller/CategoryController');
+const { createProduct, getAllProducts } = require('../controller/productController');
 
 
 
@@ -47,16 +47,21 @@ router.delete('/delete-category/:id', authVerify, deleteCategory);
 
 
 
+// ==========================
+
+// product create controller
+router.post('/create-product', authVerify, createProduct);
+
+// get all products
+router.get('/products', getAllProducts);
 
 
 
-// project controller 
-router.post('/create-project', authVerify, projectController.createProject);
-router.get('/project', projectController.projectList);
-router.get('/project/:id', authVerify, projectController.getProjectById);
-router.post('/project-update/:id', authVerify, projectController.updateProject);
-router.delete('/project-delete/:id', authVerify, projectController.deleteProject);
-router.get('/projects', authVerify, projectController.searchKeyword);
+
+
+
+
+
 
 
 // comment handel 
