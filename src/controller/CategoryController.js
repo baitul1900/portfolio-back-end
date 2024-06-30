@@ -96,6 +96,15 @@ const getAllCategoriesWithSubCategories = async (req, res) => {
     }
 };
 
+const getAllSubCategory = async (req, res) => {
+    try {
+        const subCategories = await subCategoryModel.find();
+        return res.status(200).json({ status: "success", data: subCategories });
+    } catch (err) {
+        return res.status(500).json({ status: "fail", data: err });
+    }
+};
+
 
 
 // delete category 
@@ -119,5 +128,5 @@ const deleteCategory = async (req, res) => {
 
 
 module.exports = {
-    createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories, deleteCategory
+    createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories, deleteCategory, getAllSubCategory
 }
