@@ -10,7 +10,7 @@ const commentController = require('../controller/commentController');
 const {createService, serviceList, getServiceById, updateService, deleteService} = require('../controller/serviceController');
 const {createBlog, BlogList, getBlogById, updateBlog, deleteBlog} = require('../controller/blogController');
 const { createCategory, updateCategory, createSubCategory, getAllCategoriesWithSubCategories, deleteCategory, getAllSubCategory } = require('../controller/CategoryController');
-const { createProduct, getAllProducts } = require('../controller/productController');
+const { createProduct, getAllProducts, deleteProduct, updateProduct } = require('../controller/productController');
 
 
 
@@ -57,6 +57,12 @@ router.post('/create-product', authVerify, createProduct);
 
 // get all products
 router.get('/products', getAllProducts);
+
+// delete product
+router.delete('/delete-product/:id', authVerify, deleteProduct);
+
+// update product
+router.post('/update-product/:id', authVerify, updateProduct);
 
 
 

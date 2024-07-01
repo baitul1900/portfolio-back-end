@@ -20,6 +20,10 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  image: {
+    type: String,
+    required: true // or false, if you don't want it to be mandatory
+},
 }, { timestamps: true, versionKey: false });
 
 const Product = mongoose.model('Product', productSchema);
