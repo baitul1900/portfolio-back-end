@@ -26,13 +26,27 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        let reqBody = req.body;
-        let result = await product.updateOne({ _id: reqBody._id }, reqBody);
-        return res.status(200).json({ status: "success", data: result });
-    } catch (err) { 
-        return res.status(500).json({ status: "fail", data: err });
+        const { id } = req.params;
+        const updateFields = req.body; // Contains fields to update (name, description, subCategory, etc.)
+
+        // Build update query
+        const updateQuery = { $set: updateFields };
+
+        // Execute update operation
+        const result = await product.findByIdAndUpdate(id, updateQuery, { new: true });
+
+        if (!result) {
+            return res.status(404).json({ status: 'fail', message: 'Product not found' });
+        }
+
+        res.status(200).json({ status: 'success', data: result });
+    } catch (err) {
+        console.error('Error updating product:', err);
+        res.status(500).json({ status: 'error', message: 'Failed to update product' });
     }
 };
+
+
 
 
 

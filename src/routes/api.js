@@ -3,6 +3,9 @@ const router = express.Router();
 
 // import auh verification for oken helpp
 const authVerify = require('../middlewares/authVerification');
+const loginLimiter = require('../middlewares/loginlimiter');
+const productValidator = require('../middlewares/productValidator');
+const { validateRequest } = require('../middlewares/validateRequest');
 
 // all imports about user 
 const userController = require('../controller/userController');
@@ -18,7 +21,7 @@ const { createProduct, getAllProducts, deleteProduct, updateProduct } = require(
 router.post('/user-registration', userController.userRegistration);
 
 // User login route
-router.post('/login', userController.userLoginController);
+router.post('/login',loginLimiter, userController.userLoginController);
 
 // Get user profile route
 router.get('/profile', authVerify, userController.profileDetails);
@@ -53,7 +56,7 @@ router.get('/sub-category', getAllSubCategory);
 // ==========================
 
 // product create controller
-router.post('/create-product', authVerify, createProduct);
+router.post('/create-product', productValidator, validateRequest, authVerify, createProduct);
 
 // get all products
 router.get('/products', getAllProducts);
@@ -62,7 +65,8 @@ router.get('/products', getAllProducts);
 router.delete('/delete-product/:id', authVerify, deleteProduct);
 
 // update product
-router.post('/update-product/:id', authVerify, updateProduct);
+router.put('/update-product/:id', authVerify, updateProduct);
+
 
 
 
